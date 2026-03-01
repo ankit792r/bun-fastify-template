@@ -1,0 +1,44 @@
+services:
+  database:
+    image: mongo
+    restart: always
+    container_name: mongodb-test
+    ports:
+      - '27017:27017'
+    volumes:
+      - database:/data/db/
+      - database-log:/var/log/mongodb/
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express-test
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@database:27017/
+      ME_CONFIG_BASICAUTH_ENABLED: true
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: root
+
+  cache:
+    image: redis:latest
+    container_name: redis-cache-test
+    ports:
+      - '6379:6379'
+    volumes:
+      - cache:/data
+
+volumes:
+  cache:
+
+  database-log:
+    driver: local
+    name: mongo-log
+
+  database:
+    driver: local
+    name: mongo-data
