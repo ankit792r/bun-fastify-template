@@ -1,4 +1,4 @@
-export interface BlobStorage {
+export interface IBlobStorage {
   /**
    * Upload a file to storage
    * @param filePath - The path/key where the file should be stored, e.g. 'uploads/images/photo.jpg'
