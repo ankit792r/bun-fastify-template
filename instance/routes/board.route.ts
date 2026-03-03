@@ -14,6 +14,9 @@ export default async function (fastify: FastifyInstance) {
       const cache = fastify.cache;
       console.log(await cache.get("hello"));
 
+      const blbo = fastify.testBlobStorage.getStorageUrl("test.jpg");
+      console.log(blbo);
+
       const result = await boardService.listBoards();
       return reply.send(result);
     },
@@ -26,6 +29,12 @@ export default async function (fastify: FastifyInstance) {
       const boardService = fastify.boardService;
 
       await fastify.cache.set("hello", "world");
+
+      await fastify.testBlobStorage.upload(
+        "test.jpg",
+        Buffer.from("some string"),
+        "img/jpg",
+      );
 
       const result = await boardService.createBoard({
         _id: "some if",

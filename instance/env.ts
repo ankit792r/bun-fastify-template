@@ -25,6 +25,11 @@ const env = createEnv({
 
     DEFAULT_CACHE_IMPL: z.enum(["redis", "memory"]).default("memory"),
     REDIS_URL: z.string().default("redis://localhost:6379"),
+
+    DEFAULT_BLOB_STORAGE_IMPL: z.enum(["memory"]).default("memory"),
+    BLOB_STORAGE_SERVICE_URL: z
+      .string()
+      .default(`http://localhost:8000/storage`),
   },
   runtimeEnv: process.env,
 });
