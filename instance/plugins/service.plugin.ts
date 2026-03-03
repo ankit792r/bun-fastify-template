@@ -11,7 +11,7 @@ export default fp(
       overrides.boardService || new BoardService(fastify.boardCollection);
     fastify.decorate("boardService", boardService);
   },
-  { name: "service", dependencies: ["collection", "cache"] },
+  { name: "service", dependencies: ["collection", "cache", "storage"] },
 );
 
 declare module "fastify" {
