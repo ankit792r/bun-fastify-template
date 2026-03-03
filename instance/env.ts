@@ -12,6 +12,10 @@ const env = createEnv({
   emptyStringAsUndefined: true,
   server: {
     APP_NAME: z.string().default("test-backend"),
+    CORS_ORIGIN: z
+      .string()
+      .transform((val) => val.split(","))
+      .default(["http://localhost:3000"]),
 
     PORT: z.coerce.number().default(8000),
     HOST: z.string().default("localhost"),

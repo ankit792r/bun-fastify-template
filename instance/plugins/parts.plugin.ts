@@ -1,16 +1,20 @@
-import { type FastifyInstance } from "fastify"
-import fp from "fastify-plugin"
-import type { DependencyOverrides } from "../app"
+import fastifyMultipart from "@fastify/multipart";
+import { type FastifyInstance } from "fastify";
+import fp from "fastify-plugin";
 
 export default fp(
-  async (fastify: FastifyInstance, overrides: DependencyOverrides) => {
-    fastify.log.info("plugging: PARTS into app")
+  async (fastify: FastifyInstance) => {
+    fastify.log.info("plugging: PARTS into app");
 
+    await fastify.register(fastifyMultipart, {
+      limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB limit
+      },
+    });
   },
-  { name: "parts" }
-)
+  { name: "parts", dependencies: ["storage"] },
+);
 
-declare module 'fastify' {
-  interface FastifyInstance {
-  }
+declare module "fastify" {
+  interface FastifyInstance { }
 }
