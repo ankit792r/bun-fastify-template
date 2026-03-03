@@ -7,8 +7,6 @@ config({
   quiet: true,
 })
 
-console.log(env)
-
 const host = env.HOST;
 const port = env.PORT;
 

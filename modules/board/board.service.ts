@@ -1,30 +1,32 @@
-import type { Board } from "../../entities/board.entity";
-import type { Repository } from "../../shared/database/repository";
+import type { Collection } from "mongodb";
+import type { Board } from "../../collections/board.model";
 
 export class BoardService {
-  constructor(private readonly boardRepository: Repository<Board>) {}
+  constructor(private readonly boardCollection: Collection<Board>) { }
 
+  async listBoards(): Promise<Board[]> {
+    const cursor = this.boardCollection.find({});
+    return cursor.toArray();
+  }
   async createBoard(board: Board): Promise<Board> {
-    return this.boardRepository.create(board);
+    await this.boardCollection.insertOne(board);
+    return board;
   }
 
-  async getBoardById(id: string): Promise<Board | null> {
-    return this.boardRepository.findById(id);
+  async getBoardById(_id: string): Promise<Board | null> {
+    return this.boardCollection.findOne({ _id });
   }
 
-  async updateBoard(id: string, board: Board): Promise<Board> {
-    return this.boardRepository.update(id, board);
-  }
-  
-  async deleteBoard(id: string): Promise<void> {
-    return this.boardRepository.delete(id);
+  async updateBoard(_id: string, board: Board): Promise<string> {
+    await this.boardCollection.updateOne({ _id }, board);
+    return _id;
   }
 
-  async getBoards(): Promise<Board[]> {
-    return this.boardRepository.query();
+  async deleteBoard(_id: string): Promise<void> {
+    this.boardCollection.deleteOne({ _id });
   }
-  
+
   async getBoardCount(): Promise<number> {
-    return this.boardRepository.count();
+    return this.boardCollection.countDocuments();
   }
 }

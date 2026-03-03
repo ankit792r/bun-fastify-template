@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import type { FastifyZodOpenApiTypeProvider } from "fastify-zod-openapi";
-import type { Board } from "../../entities/board.entity";
+import type { Board } from "../../collections/board.model";
 
 export default async function (fastify: FastifyInstance) {
   const server = fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>();
@@ -9,20 +9,32 @@ export default async function (fastify: FastifyInstance) {
     method: "GET",
     url: "/boards",
     handler: async (request, reply) => {
-      const boardService = fastify.boardService
-      const result = await boardService.getBoards()
-      return reply.send(result)
-    }
-  })
+      const boardService = fastify.boardService;
+
+      const cache = fastify.cache;
+      console.log(await cache.get("hello"));
+
+      const result = await boardService.listBoards();
+      return reply.send(result);
+    },
+  });
 
   server.route({
     method: "POST",
     url: "/boards",
     handler: async (request, reply) => {
-      const boardService = fastify.boardService
-      const result = await boardService.createBoard({ id: "some if", name: "my new board", description: "test board description", createdAt: new Date(), updatedAt: new Date() } as Board)
-      return reply.send(result)
-    }
-  })
-}
+      const boardService = fastify.boardService;
 
+      await fastify.cache.set("hello", "world");
+
+      const result = await boardService.createBoard({
+        _id: "some if",
+        name: "my new board",
+        description: "test board description",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      } as Board);
+      return reply.send(result);
+    },
+  });
+}
