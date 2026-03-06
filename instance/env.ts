@@ -11,7 +11,7 @@ export const coerceBoolean = () =>
 const env = createEnv({
   emptyStringAsUndefined: true,
   server: {
-    APP_NAME: z.string().default("test-backend"),
+    APP_NAME: z.string().default("base-backend"),
     CORS_ORIGIN: z
       .string()
       .transform((val) => val.split(","))
@@ -34,6 +34,30 @@ const env = createEnv({
     BLOB_STORAGE_SERVICE_URL: z
       .string()
       .default(`http://localhost:8000/storage`),
+
+    // Email configuration
+    EMAIL_SERVICE_IMPL: z.enum(["mock", "print", "smpt"]).default("print"),
+    EMAIL_FROM: z.string().default("no-reply@great-walls.com"),
+    EMAIL_HOST: z.string().default("smtp.gmail.com"),
+    EMAIL_PORT: z.number().default(587),
+    EMAIL_USER: z.string().default("no-reply@great-walls.com"),
+    EMAIL_PASSWORD: z.string().default(""),
+
+    // Authentication configuration
+    JWT_SECRET: z.string().default("secret"),
+    JWT_EXPIRES_IN: z.string().default("1h"),
+    JWT_REFRESH_SECRET: z.string().default("refresh-secret"),
+    JWT_REFRESH_EXPIRES_IN: z.string().default("7d"),
+
+    CDN_SECRET: z.string().default("cdn-secret"),
+    CDN_EXPIRES_IN: z.string().default("1h"),
+
+    ACCESS_TOKEN_EXPIRY_MINUTES: z.number().default(30),
+    REFRESH_TOKEN_EXPIRY_DAYS: z.number().default(30),
+
+    // Rate limiting configuration
+    RATE_LIMIT_WINDOW: z.number().default(60000),
+    RATE_LIMIT_MAX: z.number().default(100),
   },
   runtimeEnv: process.env,
 });

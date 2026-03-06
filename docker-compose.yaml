@@ -2,7 +2,7 @@ services:
   database:
     image: mongo
     restart: always
-    container_name: mongodb-test
+    container_name: mongodb-local
     ports:
       - '27017:27017'
     volumes:
@@ -14,7 +14,7 @@ services:
 
   mongo-express:
     image: mongo-express
-    container_name: mongo-express-test
+    container_name: express-local
     restart: always
     ports:
       - 8081:8081
@@ -26,7 +26,7 @@ services:
 
   cache:
     image: redis:latest
-    container_name: redis-cache-test
+    container_name: redis-local
     ports:
       - '6379:6379'
     volumes:

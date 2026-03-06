@@ -13,7 +13,9 @@
  * ```
  */
 
-import type { CommonErrorCode } from './common.error';
+import type { AuthErrorCode } from "../../services/auth/auth.error";
+import type { UserErrorCodes } from "../../services/user/user.error";
+import type { CommonErrorCode } from "./common.error";
 
 /**
  * Union of all possible error codes across the application.
@@ -22,5 +24,4 @@ import type { CommonErrorCode } from './common.error';
  * When you add a new error to any *.error.ts file, it will automatically
  * be included in this union type.
  */
-export type AppErrorCode =
-  | CommonErrorCode;
+export type AppErrorCode = CommonErrorCode | UserErrorCodes | AuthErrorCode;

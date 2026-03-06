@@ -43,23 +43,28 @@ export const createServer = async () => {
   server.setSerializerCompiler(serializerCompiler);
 
   if (env.NODE_ENV === "development") {
-    server.log.info('Registering Swagger/OpenAPI plugin...');
-    const { fastifySwagger } = await import('@fastify/swagger');
-    await server.register(fastifyZodOpenApiPlugin)
+    server.log.info("Registering Swagger/OpenAPI plugin...");
+    const { fastifySwagger } = await import("@fastify/swagger");
+    await server.register(fastifyZodOpenApiPlugin);
     await server.register(fastifySwagger, {
       openapi: {
-        openapi: '3.0.0',
+        openapi: "3.0.0",
         info: {
-          title: 'Portal API',
-          description: 'Fastify backend API',
-          version: '1.0.0',
+          title: "Portal API",
+          description: "Fastify backend API",
+          version: "1.0.0",
         },
         components: {
           securitySchemes: {
             bearerAuth: {
-              type: 'http',
-              scheme: 'bearer',
-              bearerFormat: 'JWT',
+              type: "http",
+              scheme: "bearer",
+              bearerFormat: "JWT",
+            },
+            cookieAuth: {
+              type: "apiKey",
+              in: "cookie",
+              name: "refreshToken",
             },
           },
         },
@@ -67,16 +72,16 @@ export const createServer = async () => {
       ...fastifyZodOpenApiTransformers,
     });
 
-    await server.register(import('@fastify/swagger-ui'), {
-      routePrefix: '/docs',
+    await server.register(import("@fastify/swagger-ui"), {
+      routePrefix: "/docs",
       uiConfig: {
-        docExpansion: 'none',
+        docExpansion: "none",
         deepLinking: false,
         persistAuthorization: true,
         withCredentials: true,
       },
       staticCSP: true,
-      transformStaticCSP: (header) => header
+      transformStaticCSP: (header) => header,
     });
   }
 

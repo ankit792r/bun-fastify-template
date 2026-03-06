@@ -1,13 +1,13 @@
 import { type FastifyInstance } from "fastify";
 import fp from "fastify-plugin";
 import type { DependencyOverrides } from "../app";
+import type { RedisClient } from "bun";
+import env from "../env";
+import type { ICache } from "../../modules/cache/cache.interface";
 import {
   createCache,
   createRedisClient,
-} from "../../shared/cache/cache-factory";
-import type { RedisClient } from "bun";
-import env from "../env";
-import type { ICache } from "../../shared/cache/cache.interface";
+} from "../../modules/cache/cache-factory";
 
 export default fp(
   async (fastify: FastifyInstance, overrides: DependencyOverrides) => {

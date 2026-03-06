@@ -1,31 +1,25 @@
 import { type FastifyInstance } from "fastify";
 import fp from "fastify-plugin";
 import type { DependencyOverrides } from "../app";
-import { createCollection } from "../../shared/mongodb/colls-factory";
-import {
-  BoardCollectionConfig,
-  type Board,
-} from "../../collections/board.model";
 import type { Collection } from "mongodb";
+import { UserCollectionConfig, type User } from "../../entities/user.model";
+import { createCollection } from "../../database/colls-factory";
 
 export default fp(
   async (fastify: FastifyInstance, overrides: DependencyOverrides) => {
     fastify.log.info("plugging: REPO into app");
 
-    const boardCollection =
-      overrides.boardRepository ||
-      (await createCollection<Board>(
-        BoardCollectionConfig,
-        fastify.mongoClient,
-      ));
+    const userCollection =
+      overrides.userCollection ??
+      (await createCollection<User>(UserCollectionConfig, fastify.mongoClient));
 
-    fastify.decorate("boardCollection", boardCollection);
+    fastify.decorate("userCollection", userCollection);
   },
   { name: "collection", dependencies: ["db"] },
 );
 
 declare module "fastify" {
   interface FastifyInstance {
-    boardCollection: Collection<Board>;
+    userCollection: Collection<User>;
   }
 }

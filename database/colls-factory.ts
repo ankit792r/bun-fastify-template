@@ -1,6 +1,6 @@
 import type { Collection, Document, MongoClient } from "mongodb";
 import type { ZodType } from "zod";
-import env from "../../instance/env";
+import env from "../instance/env";
 
 export type CollectionConfig<T extends Document> = {
   name: string;

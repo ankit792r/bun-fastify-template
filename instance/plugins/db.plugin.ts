@@ -1,8 +1,8 @@
 import { type FastifyInstance } from "fastify";
 import fp from "fastify-plugin";
 import type { DependencyOverrides } from "../app";
-import { createMongoClient } from "../../shared/mongodb/mongo-factory";
 import type { MongoClient } from "mongodb";
+import { createMongoClient } from "../../database/mongo-factory";
 
 export default fp(
   async (fastify: FastifyInstance, overrides: DependencyOverrides) => {
