@@ -8,6 +8,7 @@ import type { Collection, MongoClient } from "mongodb";
 import type { User } from "../entities/user.model";
 import type { UserService } from "../services/user/user.service";
 import type { ICache } from "../modules/cache/cache.interface";
+import type { AuthService } from "../services/auth/auth.service";
 
 export type DependencyOverrides = {
   mongoClient?: MongoClient;
@@ -16,6 +17,8 @@ export type DependencyOverrides = {
 
   userCollection?: Collection<User>;
   userService?: UserService;
+
+  authService?: AuthService;
 };
 
 export async function app(fastify: FastifyInstance, opts?: AppPluginOptions) {

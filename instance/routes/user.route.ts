@@ -4,6 +4,11 @@ import z from "zod";
 import { UserBasicResponseDtoSchema } from "../../services/user/dto/user-response.dto";
 import { UsernameCheckDtoSchema } from "../../services/user/dto/username-check.dto";
 import { ErrorResponseDtoSchema } from "../errors/error-dto";
+import {
+  ImageExtensionMime,
+  parseFormFileToBuffer,
+} from "../../modules/upload-handler";
+import { createProfileImageId } from "../../modules/blob-id";
 
 export default async function (fastify: FastifyInstance) {
   const server = fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>();
@@ -26,6 +31,41 @@ export default async function (fastify: FastifyInstance) {
         request.getUserOrThrow().sub,
       );
       return reply.send(result);
+    },
+  });
+
+  server.route({
+    method: "POST",
+    url: "/users/me/update-profile",
+    handler: async (request, reply) => {
+      const uploadedFile = await parseFormFileToBuffer(request, {
+        allowedExtensions: [
+          ImageExtensionMime.PNG.ext,
+          ImageExtensionMime.JPEG.ext,
+        ],
+        allowedMimeTypes: [
+          ImageExtensionMime.JPEG.mime,
+          ImageExtensionMime.PNG.mime,
+        ],
+        maxFileSize: 10 * 1024 * 1024, // 10MB
+        multipleFile: true,
+      });
+
+      const profileImageId = createProfileImageId();
+      const filePath = `${profileImageId}${uploadedFile.fileExtension}`;
+
+      const internalUrl = await fastify.profileBlobStorage.upload(
+        filePath,
+        uploadedFile.buffer,
+        uploadedFile.mimetype,
+      );
+
+      const publicUrl = fastify.profileBlobStorage.getPublicUrl(filePath);
+      await fastify.userService.updateUserProfileImage(
+        request.getUserOrThrow().sub,
+        publicUrl,
+      );
+      return reply.send(publicUrl);
     },
   });
 

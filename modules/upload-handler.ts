@@ -3,10 +3,10 @@ import path from "path";
 
 import type { FastifyRequest } from "fastify";
 import z from "zod";
-import UploadErrors from "../instance/errors/upload-error";
 import CommonErrors from "../instance/errors/common.error";
 import { AppError, type AppErrorParams } from "../instance/errors/app-error";
 import { isFastifyError } from "../instance/errors/handlers";
+import UploadErrors from "../instance/errors/upload-error";
 
 const UploadContentLengthHeaderSchema = z.coerce.number().int().positive();
 const UploadContentTypeHeaderSchema = z.string();
@@ -23,10 +23,22 @@ export type UploadHeaderRequirements = {
   contentDigest?: boolean;
 };
 
+export const ImageExtensionMime = {
+  JPEG: {
+    ext: ".jpeg",
+    mime: "image/jpeg",
+  },
+  PNG: {
+    ext: ".png",
+    mime: "image/png",
+  },
+};
+
 export type ParseFormFileToBufferOptions = {
   allowedMimeTypes: string[];
   allowedExtensions: string[];
   maxFileSize: number;
+  multipleFile?: boolean; // TODO: implement this
   /** Optional upload header requirements for early validation. */
   requireUploadHeaders?: UploadHeaderRequirements;
 };
@@ -35,6 +47,8 @@ export type ParseFormFileToBufferResult = {
   buffer: Buffer;
   mimetype: string;
   dangerousUserProvidedFilename: string;
+
+  /** File extension in `.[ext]` format */
   fileExtension: string;
   fieldName: string;
 };

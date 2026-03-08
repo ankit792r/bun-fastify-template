@@ -128,9 +128,8 @@ export default fp(
       try {
         const payload =
           fastify.jwt.auth.verify<JwtAccessTokenPayloadDto>(token);
-        if (payload.typ !== "access") {
+        if (payload.typ !== "access")
           throw new AppError(AuthErrors.InvalidToken);
-        }
         return payload;
       } catch (err) {
         convertErrorAndRethrow(err);
@@ -143,9 +142,8 @@ export default fp(
       try {
         const payload =
           fastify.jwt.auth.verify<JwtRefreshTokenPayloadDto>(token);
-        if (payload.typ !== "refresh") {
+        if (payload.typ !== "refresh")
           throw new AppError(AuthErrors.InvalidToken);
-        }
         return payload;
       } catch (err) {
         convertErrorAndRethrow(err);

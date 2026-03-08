@@ -11,7 +11,7 @@ export default fp(
     const userService =
       overrides.userService ?? new UserService(fastify.userCollection);
 
-    const authService = new AuthService(userService);
+    const authService = overrides.authService ?? new AuthService(userService);
 
     fastify.decorate("userService", userService);
     fastify.decorate("authService", authService);

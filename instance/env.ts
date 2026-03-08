@@ -30,10 +30,11 @@ const env = createEnv({
     DEFAULT_CACHE_IMPL: z.enum(["redis", "memory"]).default("memory"),
     REDIS_URL: z.string().default("redis://localhost:6379"),
 
-    DEFAULT_BLOB_STORAGE_IMPL: z.enum(["memory"]).default("memory"),
+    DEFAULT_BLOB_STORAGE_IMPL: z.enum(["memory", "disk"]).default("disk"),
+    DISK_STORAGE_BASE_PATH: z.string().default("../public/storage"),
     BLOB_STORAGE_SERVICE_URL: z
       .string()
-      .default(`http://localhost:8000/storage`),
+      .default(`http://localhost:8000/content`),
 
     // Email configuration
     EMAIL_SERVICE_IMPL: z.enum(["mock", "print", "smpt"]).default("print"),

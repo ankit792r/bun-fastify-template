@@ -99,4 +99,15 @@ export class UserService {
     if (!user) throw new AppError(UserError.UserNotFound);
     return user;
   }
+
+  async updateUserProfileImage(id: UserId, publicPath: string): Promise<void> {
+    await this.userCollection.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          profileImage: publicPath,
+        },
+      },
+    );
+  }
 }
