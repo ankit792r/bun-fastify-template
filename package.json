@@ -3,11 +3,6 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
-  "scripts": {
-    "clean": "rm -rf dist && echo 'Done.'",
-    "start": "bun run index.ts",
-    "dev": "bun --watch run index.ts",
-  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/bun": "latest",
