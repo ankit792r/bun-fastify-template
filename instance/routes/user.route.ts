@@ -10,7 +10,7 @@ import {
 } from "../../modules/upload-handler";
 import { createProfileImageId } from "../../modules/blob-id";
 
-export default async function (fastify: FastifyInstance) {
+export default async function(fastify: FastifyInstance) {
   const server = fastify.withTypeProvider<FastifyZodOpenApiTypeProvider>();
   server.addHook("onRequest", fastify.authenticate);
 
@@ -54,7 +54,7 @@ export default async function (fastify: FastifyInstance) {
       const profileImageId = createProfileImageId();
       const filePath = `${profileImageId}${uploadedFile.fileExtension}`;
 
-      const internalUrl = await fastify.profileBlobStorage.upload(
+      await fastify.profileBlobStorage.upload(
         filePath,
         uploadedFile.buffer,
         uploadedFile.mimetype,

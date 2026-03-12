@@ -31,7 +31,7 @@ const env = createEnv({
     REDIS_URL: z.string().default("redis://localhost:6379"),
 
     DEFAULT_BLOB_STORAGE_IMPL: z.enum(["memory", "disk"]).default("disk"),
-    DISK_STORAGE_BASE_PATH: z.string().default("../public/storage"),
+    DISK_STORAGE_BASE_PATH: z.string().default("statics/storage"),
     BLOB_STORAGE_SERVICE_URL: z
       .string()
       .default(`http://localhost:8000/content`),
